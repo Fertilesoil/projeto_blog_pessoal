@@ -47,14 +47,17 @@ namespace blogpessoal.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(/* 
         Aqui ele pega o objeto para o teste já que não pode ser passado pelo caminho, que aceita apenas 
-        um valor, aqui ele é retornado como json */[FromBody] Postagem postagem)
+        um valor. Aqui ele é retornado como json */[FromBody] Postagem postagem)
         {
-            var validarPostagem = await _postagemValidator.ValidateAsync(postagem);
+            var ValidarPostagem = await _postagemValidator.ValidateAsync(postagem);
 
-            if (!validarPostagem.IsValid) // <-- A exclamação no começo da expressão indica negação
-                return StatusCode(StatusCodes.Status400BadRequest, validarPostagem);
+            if (!ValidarPostagem.IsValid) // <-- A exclamação no começo da expressão indica negação
+                return StatusCode(StatusCodes.Status400BadRequest, ValidarPostagem);
 
-            await _postagemService.Create(postagem);
+            var Resposta = await _postagemService.Create(postagem);
+
+            if (Resposta is null)
+                return BadRequest("Tema Não Encontrado!");
 
             return CreatedAtAction(nameof(GetById), new { id = postagem.Id }, postagem);
         }
@@ -73,7 +76,7 @@ namespace blogpessoal.Controllers
             var Resposta = await _postagemService.Update(postagem);
 
             if (Resposta is null)
-                return NotFound("Postagem Não Encontrada!!");
+                return NotFound("Postagem e/ou Tema Não Encontrados !!");
 
             return Ok(Resposta);
         }
