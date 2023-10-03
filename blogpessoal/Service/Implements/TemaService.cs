@@ -12,6 +12,7 @@ namespace blogpessoal.Service.Implements
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Tema>> GetAll()
         {
             return await _context.Temas
@@ -44,6 +45,7 @@ namespace blogpessoal.Service.Implements
 
             return Tema;
         }
+
         public async Task<Tema?> Create(Tema temas)
         {
             _context.Temas.Add(temas);

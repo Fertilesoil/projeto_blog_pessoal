@@ -12,18 +12,26 @@ namespace blogpessoal.Data
         {
             modelBuilder.Entity<Postagem>().ToTable("tb_postagem");
             modelBuilder.Entity<Tema>().ToTable("tb_temas");
+            modelBuilder.Entity<User>().ToTable("tb_usuarios");
+
                _= modelBuilder.Entity<Postagem>() // Indica quem tem a chave primária
                  .HasOne( _=> _.Tema) // Indica o tipo de relação, no caso tem um
                  .WithMany(t => t.Postagem) // Indica o tipo de relacionamento, tem muitos 
                  .HasForeignKey("TemaId") // Indica o nome da chave estrangeira no banco de dados
                  .OnDelete(DeleteBehavior.Cascade); // Indica o comportamento ao deletar, se apagar
-            // um tema, todas as postagens dele serão apagadas, não haverão orfãos
+                                                    // um tema, todas as postagens dele serão apagadas, não haverão orfãos
+
+            _ = modelBuilder.Entity<Postagem>()
+                .HasOne(_ => _.Usuario) 
+                .WithMany(u => u.Postagem)  
+                .HasForeignKey("UsuarioId")
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         // Registrar DbSet - Objeto responsável por manipular a tabela
-
         public DbSet<Postagem> Postagens { get; set; } = null!;
         public DbSet<Tema> Temas { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

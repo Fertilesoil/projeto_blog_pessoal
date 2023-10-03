@@ -17,6 +17,7 @@ namespace blogpessoal.Service.Implements
         {
             return await _context.Postagens
                 .Include(p => p.Tema)
+                .Include(p => p.Usuario)
                 .ToListAsync();
         }
 
@@ -26,6 +27,7 @@ namespace blogpessoal.Service.Implements
             {
                 var Postagem = await _context.Postagens
                     .Include(p => p.Tema)
+                    .Include(p => p.Usuario)
                     .FirstAsync(i => i.Id == id);
                 return Postagem;
             }
@@ -39,6 +41,7 @@ namespace blogpessoal.Service.Implements
         {
             var Postagem = await _context.Postagens
                 .Include(p => p.Tema)
+                .Include(p => p.Usuario)
                 .Where(p => p.Titulo.Contains(titulo))
                 .ToListAsync();
 
@@ -56,6 +59,9 @@ namespace blogpessoal.Service.Implements
 
             postagem.Tema = postagem.Tema is not null ? _context.Temas
                 .FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
+
+            postagem.Usuario = postagem.Usuario is not null 
+                ? await _context.Users.FirstOrDefaultAsync(u => u.Id == postagem.Usuario.Id) : null;
 
             await _context.Postagens.AddAsync(postagem);
             await _context.SaveChangesAsync();
@@ -80,6 +86,9 @@ namespace blogpessoal.Service.Implements
 
             postagem.Tema = postagem.Tema is not null ? _context.Temas
                 .FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
+
+            postagem.Usuario = postagem.Usuario is not null
+                ? await _context.Users.FirstOrDefaultAsync(u => u.Id == postagem.Usuario.Id) : null;
 
             _context.Entry(PostagemUpdate).State = EntityState.Detached;
             _context.Entry(postagem).State = EntityState.Modified;

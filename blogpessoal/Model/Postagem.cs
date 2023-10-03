@@ -19,5 +19,6 @@ namespace blogpessoal.Model
         public string Texto { get; set; } = string.Empty;
 
         public virtual Tema? Tema { get; set; } //Chave estrangeira 
+        public virtual User? Usuario { get; set; } //Chave estrangeira 
     }
 }
