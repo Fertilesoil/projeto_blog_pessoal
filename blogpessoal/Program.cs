@@ -27,23 +27,25 @@ namespace blogpessoal
                 {
                     options.SerializerSettings.ReferenceLoopHandling =
                     Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.NullValueHandling = 
+                    Newtonsoft.Json.NullValueHandling.Ignore;
                 });
 
-            // Conexão com o banco de dados
+            // Conexï¿½o com o banco de dados
             var connectionstring = builder.Configuration
-               .GetConnectionString("DefaultConnection");
+            .GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(connectionstring)
             );
 
-            // Registrar a validação das entidades
+            // Registrar a validaï¿½ï¿½o das entidades
 
             builder.Services.AddTransient<IValidator<Postagem>, PostagemValidator>();
             builder.Services.AddTransient<IValidator<Tema>, TemaValidator>();
             builder.Services.AddTransient<IValidator<User>, UserValidator>();
 
-            // Registrar as classes de Serviço (Service)
+            // Registrar as classes de Serviï¿½o (Service)
             builder.Services.AddScoped<IPostagemService, PostagemService>();
             builder.Services.AddScoped<ITemaService, TemaService>();
             builder.Services.AddScoped<IUserService, UserService>();
@@ -71,7 +73,7 @@ namespace blogpessoal
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Configuração do CORS
+            // Configuraï¿½ï¿½o do CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyPolicy",
@@ -85,7 +87,7 @@ namespace blogpessoal
 
             var app = builder.Build();
 
-            // Configuração para gerar o banco de dados automaticamente 
+            // Configuraï¿½ï¿½o para gerar o banco de dados automaticamente 
             using (var scope = app.Services.CreateAsyncScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -99,7 +101,7 @@ namespace blogpessoal
                 app.UseSwaggerUI();
             }
 
-            // O CORS é inicializado aqui
+            // O CORS ï¿½ inicializado aqui
             app.UseCors("MyPolicy");
 
             app.UseAuthentication();

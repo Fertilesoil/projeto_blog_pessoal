@@ -1,11 +1,8 @@
 ﻿using blogpessoal.Model;
 using blogpessoal.Security;
 using blogpessoal.Service;
-using blogpessoal.Service.Implements;
-using blogpessoal.Validator;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blogpessoal.Controllers
@@ -19,9 +16,9 @@ namespace blogpessoal.Controllers
         private readonly IAuthService _authService;
 
         public UserController(
-           IUserService userService,
-           IValidator<User> userValidator,
-           IAuthService authService)
+            IUserService userService,
+            IValidator<User> userValidator,
+            IAuthService authService)
         {
             _userService = userService;
             _userValidator = userValidator;

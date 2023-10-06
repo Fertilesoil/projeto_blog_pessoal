@@ -17,8 +17,8 @@ namespace blogpessoal.Controllers
         private readonly IValidator<Tema> _temaValidator;
 
         public TemaController(
-           ITemaService temaService,
-           IValidator<Tema> temaValidator)
+        ITemaService temaService,
+        IValidator<Tema> temaValidator)
         {
             _temaService = temaService;
             _temaValidator = temaValidator;
