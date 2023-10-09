@@ -20,9 +20,7 @@ namespace blogpessoal.Model
         [StringLength(8000)]
         public string Texto { get; set; } = string.Empty;
 
-        [JsonIgnore]
         public virtual Tema? Tema { get; set; } //Chave estrangeira 
-        [JsonIgnore]
         public virtual User? Usuario { get; set; } //Chave estrangeira 
     }
 }

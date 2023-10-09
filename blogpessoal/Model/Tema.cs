@@ -15,7 +15,6 @@ namespace blogpessoal.Model
         public string Descricao { get; set; } = string.Empty;
 
         [InverseProperty("Tema")] // Indica chave estrangeira
-        [JsonIgnore]
         public virtual ICollection<Postagem>? Postagem { get; set; }
     }
 }
