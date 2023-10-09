@@ -37,12 +37,32 @@ namespace blogpessoal
                 });
 
             // Conex�o com o banco de dados
-            var connectionstring = builder.Configuration
-            .GetConnectionString("DefaultConnection");
+    if (builder.Configuration["Enviroment:Start"] == "PROD")
+            {
+                /* Conexão Remota (Nuvem) - PostgreSQL */
+                
+                builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("secrets.json");
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(connectionstring)
-            );
+                var connectionString = builder.Configuration
+                    .GetConnectionString("ProdConnection");
+
+                builder.Services.AddDbContext<AppDbContext>(options =>
+                    options.UseNpgsql(connectionString)
+                );
+
+            }
+            else
+            {
+                /* Conexão Local - SQL Server */
+                
+                var connectionString = builder.Configuration.
+                    GetConnectionString("DefaultConnection");
+
+                builder.Services.AddDbContext<AppDbContext>(options =>
+                    options.UseSqlServer(connectionString)
+                );
+            }
 
             // Registrar a valida��o das entidades
 
@@ -138,7 +158,16 @@ namespace blogpessoal
             //if (app.Environment.IsDevelopment())
             //{
                 app.UseSwagger();
-                app.UseSwaggerUI();
+
+                if (app.Environment.IsProduction())
+                {
+                app.UseSwaggerUI(options =>
+                    {
+                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Blog Pessoal - v1");
+                        options.RoutePrefix = string.Empty;
+                    });
+                }
+               
             //}
 
             // O CORS � inicializado aqui
