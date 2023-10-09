@@ -154,9 +154,7 @@ namespace blogpessoal
                 dbContext.Database.EnsureCreated();
             }
 
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
+          
                 app.UseSwagger();
 
                 if (app.Environment.IsProduction())
@@ -167,8 +165,11 @@ namespace blogpessoal
                         options.RoutePrefix = string.Empty;
                     });
                 }
+                else
+                {
+                    app.UseSwaggerUI();
+                }
                
-            //}
 
             // O CORS � inicializado aqui
             app.UseCors("MyPolicy");
