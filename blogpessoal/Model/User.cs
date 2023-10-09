@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace blogpessoal.Model
 {
@@ -26,6 +27,7 @@ namespace blogpessoal.Model
         public string? Foto { get; set; } = string.Empty;
 
         [InverseProperty("Usuario")]
+        [JsonIgnore]
         public virtual ICollection<Postagem>? Postagem { get; set; }
     }
 }
