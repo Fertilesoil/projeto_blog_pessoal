@@ -66,7 +66,7 @@ namespace blogpessoal.Controllers
         public async Task<ActionResult> Update([FromBody] User user)
         {
             if (user.Id == 0)
-                return BadRequest("Id do user é Invalido");
+                return BadRequest("Id de user é Invalido");
 
             var ValidarUser = await _userValidator.ValidateAsync(user);
 

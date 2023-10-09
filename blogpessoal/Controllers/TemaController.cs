@@ -1,7 +1,5 @@
 ﻿using blogpessoal.Model;
 using blogpessoal.Service;
-using blogpessoal.Service.Implements;
-using blogpessoal.Validator;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,9 +55,9 @@ namespace blogpessoal.Controllers
             if (!ValidarTema.IsValid) // <-- A exclamação no começo da expressão indica negação
                 return StatusCode(StatusCodes.Status400BadRequest, ValidarTema);
 
-            var Resposta = await _temaService.Create(tema);
+            await _temaService.Create(tema);
 
-            return CreatedAtAction(nameof(GetById), new { id = Resposta!.Id }, Resposta);
+            return CreatedAtAction(nameof(GetById), new { id = tema!.Id }, tema);
         }
 
         [HttpPut]

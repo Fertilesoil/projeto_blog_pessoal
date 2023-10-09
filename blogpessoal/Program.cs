@@ -1,4 +1,5 @@
 
+using blogpessoal.Configuration;
 using blogpessoal.Data;
 using blogpessoal.Model;
 using blogpessoal.Security;
@@ -7,9 +8,13 @@ using blogpessoal.Service;
 using blogpessoal.Service.Implements;
 using blogpessoal.Validator;
 using FluentValidation;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.ComponentModel;
 using System.Text;
 
 namespace blogpessoal
@@ -71,7 +76,42 @@ namespace blogpessoal
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options => {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    // Informações da pessoa desenvolvedora
+                    Version = "V1",
+                    Title = "Projeto Blog Pessoal",
+                    Description = "Projeto Blog Pessoal - ASP.NET Core 7.0",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Fernando Dias Costa",
+                        Email = "fdias132@gmail.com",
+                        Url = new Uri("https://github.com/Fertilesoil"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Github",
+                        Url = new Uri("https://github.com/Fertilesoil")
+                    }
+                });
+
+            // Configuração de segurança do swagger
+            options.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Digite um Token JWT Válido",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            
+            // Adiiconar a Indicação de endpoint protegido
+            options.OperationFilter<AuthResponsesOperationFilter>();
+            });
+
+            builder.Services.AddFluentValidationRulesToSwagger();
 
             // Configura��o do CORS
             builder.Services.AddCors(options =>
@@ -80,8 +120,8 @@ namespace blogpessoal
                     policy =>
                     {
                         policy.AllowAnyOrigin()
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
             });
 
@@ -95,11 +135,11 @@ namespace blogpessoal
             }
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
             // O CORS � inicializado aqui
             app.UseCors("MyPolicy");
