@@ -11,10 +11,8 @@ using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.ComponentModel;
 using System.Text;
 
 namespace blogpessoal
@@ -154,7 +152,6 @@ namespace blogpessoal
                 dbContext.Database.EnsureCreated();
             }
 
-          
                 app.UseSwagger();
 
                 if (app.Environment.IsProduction())
@@ -169,7 +166,6 @@ namespace blogpessoal
                 {
                     app.UseSwaggerUI();
                 }
-               
 
             // O CORS � inicializado aqui
             app.UseCors("MyPolicy");
